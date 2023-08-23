@@ -1,0 +1,211 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Q. How to adding a hover animation ?
+;; A. EVENTBOX -> OVERLAY -> REVEALER + MODULE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Widgets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defwidget widget_gnome_widget []
+  (eventbox ; :onhoverlost "$HOME/.config/eww/popup/launch.sh --toggle_gnome_widget"
+    (box :orientation "v" :valign "center" :halign "center" :space-evenly false :spacing 15
+
+      ;; Date
+      (box :class "date" 
+           :orientation "v" :halign "center" :valign "center" :space-evenly false 
+           :width 280 :spacing 20
+       
+        (box :class "clock" (label :text "${TIME}"))
+
+        (box :class "date_label"
+             :orientation "v" :halign "left" :space-evenly false
+          (box  
+            (box :halign "start" (label :text "${DOW}"))
+            (box :halign "end" (label :text "${DAY}, ${MONTH}"))
+          ) 
+        )
+      )
+
+      ;; Profile
+      (box :class "profile"
+           :orientation "v" :halign "center" :valign "center" :space-evenly false 
+           :width 280 :spacing 10
+        
+        (box :halign "center" 
+             :style " background-image:   url('${FACE}');
+                      background-repeat:  no-repeat;
+                      background-size:    120px 120px;
+                      min-width:          120px;
+                      min-height:         120px;
+
+                      border:             2px solid #2a2a2a;
+                    "
+        )
+        
+        (label :class "name" :text "${NAME}")
+      )
+
+      ;; Power menu
+      (box :class "power_menu" :orientation "h" :halign "center" :valign "center" :space-evenly false
+           :spacing 10
+
+        ;; Shutdown button
+        (eventbox :class "power_shutdown" 
+                  :width 40 :height 40
+                  :onhover "eww -c $HOME/.config/eww/popup/ update SHUTDOWN_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update SHUTDOWN_HOVER=false &"
+                  :onclick "$(sleep 1s; poweroff)"
+          (overlay 
+            (revealer :reveal "${SHUTDOWN_HOVER}" :transition "crossfade"   
+              (box :style "${HOVER_STYLE}")
+            ) 
+            (label :text "󰐥")
+          )
+        )
+
+        ;; Suspend button
+        (eventbox :class "power_suspend" 
+                  :width 40 :height 40
+                  :onhover "eww -c $HOME/.config/eww/popup/ update SUSPEND_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update SUSPEND_HOVER=false &"
+                  :onclick "systemctl suspend" 
+          (overlay 
+            (revealer :reveal "${SUSPEND_HOVER}" :transition "crossfade"
+              (box :style "${HOVER_STYLE}")
+            ) 
+            (label :text "󰤄")
+          )
+        )
+       
+        ;; Logout button
+        (eventbox :class "power_logout" 
+                  :width 40 :height 40
+                  :onhover "eww -c $HOME/.config/eww/popup/ update LOGOUT_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update LOGOUT_HOVER=false &"
+                  :onclick "$(sleep 1s; kill -9 -1)"
+          (overlay
+            (revealer :reveal "${LOGOUT_HOVER}" :transition "crossfade"   
+              (box :style "${HOVER_STYLE}")
+            )
+            (label :text "󰗼")
+          )
+        )
+
+        ;; Reboot button
+        (eventbox :class "power_reboot" 
+                  :width 40 :height 40
+                  :onhover "eww -c $HOME/.config/eww/popup/ update REBOOT_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update REBOOT_HOVER=false &"
+                  :onclick "$(sleep 1s; reboot)"
+          (overlay
+            (revealer :reveal "${REBOOT_HOVER}" :transition "crossfade"
+              (box :style "${HOVER_STYLE}")
+            )
+            (label :text "󰑙")
+          )
+        ) 
+      
+      )
+
+      ;; Brightness
+      (box :class "brightness"
+           :orientation "v" :halign "left" :space-evenly false 
+        
+        (box :class "bright_label" 
+          (box :halign "start" (label :text "brightness")) 
+          (box :halign "end" (label :text "${BRIGHT_LEVEL}%")) 
+        )
+
+        (box :class "bright_bar" 
+             :orientation "h" :halign "center" :space-evenly false :spacing 15
+          (label :text "")
+          (scale :value BRIGHT_LEVEL :min 0 :max 100 :active false)
+        )
+      )
+
+      ;; Volume
+      (box :class "volume"
+           :orientation "v" :halign "left" :space-evenly false  
+        
+        (box :class "volume_label"
+          (box :halign "start" (label :text "volume"))
+          (box :halign "end" (label :text "${VOLUME_LEVEL}%"))
+        )
+
+        (box :class "volume_bar"
+             :orientation "h" :halign "center" :space-evenly false :spacing 15
+          (label :text "") 
+          (scale :value VOLUME_LEVEL :min 0 :max 100 :active false)
+        )
+      )
+
+      ;; Lan
+      (box :orientation "v" :space-evenly false 
+        
+        (box :class "lan_label" 
+             :halign "left" :space-evenly false 
+          (label :text "Network")
+        )
+        
+        (eventbox :class "lan" 
+                  :width 280 :height 40 
+                  :onhover "eww -c $HOME/.config/eww/popup/ update LAN_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update LAN_HOVER=false &"
+                  :onclick "scripts/network.sh --toggle &" 
+
+          (overlay 
+            (revealer :reveal {"${LAN_CON_STATUS}" == "connected" ? true : false} 
+                      :transition "crossfade"
+              (box :style "
+                            background-color:   #545454;
+                          "
+              )
+            )
+
+            (revealer :reveal "${LAN_HOVER}" :transition "crossfade"
+              (box :style "${HOVER_STYLE}") 
+            )
+        
+            (label :text "${LAN_SSID}")
+          )
+        ) 
+      )
+
+      ;; Bluetooth 
+      (box :orientation "v" :space-evenly false 
+
+        (box :class "bluetooth_label" 
+             :halign "left" :space-evenly false 
+          (label :text "Bluetooth")
+        )
+        
+        (eventbox :class "bluetooth"
+                  :width 280 :height 40
+                  :onhover "eww -c $HOME/.config/eww/popup/ update BLUETOOTH_HOVER=true &"
+                  :onhoverlost "eww -c $HOME/.config/eww/popup/ update BLUETOOTH_HOVER=false &"
+                  :onclick "scripts/bluetooth.sh --toggle"
+           
+          (overlay 
+            (revealer :reveal {"${BLUETOOTH_CON_STATUS}" == "connected" ? true : false} 
+                      :transition "crossfade"
+              (box :style "
+                            background-color:     #545454;
+                          "
+              )
+            ) 
+           
+            (revealer :reveal "${BLUETOOTH_HOVER}" :transition "crossfade"
+              (box :style "${HOVER_STYLE}")
+            )  
+       
+            (label :text "${BLUETOOTH_DEVICE}")
+          )
+        )
+      )
+    )
+  )
+)
+
+
+
+
+
+

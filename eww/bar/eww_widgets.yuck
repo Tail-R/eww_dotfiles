@@ -1,0 +1,115 @@
+;; Widgets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Workspace
+(defwidget widget_workspace []
+  (box :class "workspace" 
+       :halign "center" :valign "center"
+    (literal :content WORKSPACES_YUCK)
+  )
+)
+
+;; Music
+(defwidget widget_music []
+  (eventbox :onhover "eww -c $HOME/.config/eww/bar/ update MUSIC_HOVER=true &"
+            :onhoverlost "eww -c $HOME/.config/eww/bar/ update MUSIC_HOVER=false &"
+            :onclick "$HOME/.config/eww/popup/launch.sh --toggle_music"
+
+    (overlay
+      (revealer :reveal "${MUSIC_PLAYING}" :transition "crossfade"
+        (box :class "music_animation" 
+             :css " .music_animation {
+                      background-image:     url('${MUSIC_ART}');
+                      background-repeat:    no-repeat;
+                      background-size:      cover;
+                      border:               2px solid #2a2a2a;
+                      opacity:              0.45;
+                      transition:           1s ease-in;
+                    }
+                  "
+        )
+      )
+      
+      (revealer :reveal "${MUSIC_HOVER}" :transition "crossfade"
+        (box :style "${HOVER_STYLE}") 
+      )
+      
+      (box :class "music" 
+           :orientation "h" :halign "start" :valign "center" :space-evenly false :spacing 10
+    
+        (box :style " background-image:     url('${MUSIC_ART}');
+                      background-repeat:    no-repeat;
+                      background-size:      40px;
+                      background-position:  center center;
+                      min-width:            40px;
+                      min-height:           40px;
+
+                      margin-left:          4px;
+                      transition:           1s ease-in;
+                    "
+        )
+  
+        (box :orientation "v" :valign "center"
+          (label :halign "start" :limit-width 13 :text "${MUSIC_TITLE}")
+          (label :halign "start" :limit-width 10 :text "${MUSIC_ARTIST}") 
+        )
+      )
+    )
+  )
+)
+
+;; Clock
+(defwidget widget_clock []
+  (box :class "clock"
+       :orientation "h" :halign "center" :valign "center" :space-evenly false :spacing 20
+    (label :class "clock_icon" :text "")
+    (label :class "clock_level" :text "${TIME}")
+  )
+)
+
+;; Volume
+(defwidget widget_volume []
+  (box :class "volume"
+       :halign "center" :valign "center" :space-evenly false :spacing 20
+    (label :class "volume_icon" :text "")
+    (label :class "volume_level" :text "${VOLUME_LEVEL}%")
+  )
+)
+
+;; Brightness
+(defwidget widget_brightness []
+  (box :class "battery"
+       :halign "center" :valign "center" :space-evenly false :spacing 20
+    (label :class "bright_icon" :text "")
+    (label :class "bright_level" :text "${BRIGHT_LEVEL}%")
+  )
+)
+
+;; Battery
+(defwidget widget_battery []
+  (eventbox :onclick "$HOME/.config/eww/popup/launch.sh --toggle_gnome_widget"
+            :onhover "eww -c $HOME/.config/eww/bar/ update BATTERY_HOVER=true &"
+            :onhoverlost "eww -c $HOME/.config/eww/bar/ update BATTERY_HOVER=false &"
+
+    (overlay
+      (revealer :reveal "${BATTERY_HOVER}" :transition "crossfade"
+        (box :style "${HOVER_STYLE}") 
+      )
+
+      (box :class "battery"
+           :halign "center" :valign "center" :space-evenly false :spacing 20
+        (label :class "battery-icons" :text "${BATTERY_ICONS}")
+        (label :class "battery-level" :text "${BATTERY_LEVEL}%")
+      ) 
+    )
+  )
+)
+
+
+
+
+
+
+
+
+
+

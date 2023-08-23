@@ -1,0 +1,37 @@
+;; Windows ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Gnome widget
+(defwindow window_gnome_widget
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "-3%"
+                      :y "6%"
+                      :width "16%"
+                      :height "52%"
+                      :anchor "top right"
+            )
+  (widget_gnome_widget)
+)
+
+;; Music popup
+(defwindow window_music
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "10%"
+                      :y "6%"
+                      :width "18%"
+                      :height "24%"
+                      :anchor "top left"
+            )
+  (widget_music)
+)
+
+
+
+
+
+
+
+
+

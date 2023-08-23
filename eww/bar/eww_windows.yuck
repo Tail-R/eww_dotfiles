@@ -1,0 +1,86 @@
+;; Windows ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Workspaces
+(defwindow window_workspace
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "0.5%"
+                      :y "0.7%"
+                      :width "10%"
+                      :height "4%"
+                      :anchor "top left"
+            )
+  (widget_workspace)
+)
+
+; Music
+(defwindow window_music
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "11%"
+                      :y "0.7%"
+                      :width "14%"
+                      :height "4%"
+            )
+  (widget_music)
+)
+
+;; Clock
+(defwindow window_clock
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "0%"
+                      :y "0.7%"
+                      :width "7%"
+                      :height "4%"
+                      :anchor "top center"
+            )
+  (widget_clock)
+)
+
+;; Volume
+(defwindow window_volume
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "78.5%"
+                      :y "0.7%"
+                      :width "5%"
+                      :height "4%"
+            )
+  (widget_volume)
+)
+
+;; Brightness
+(defwindow window_brightness
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "84%"
+                      :y "0.7%"
+                      :width "5%"
+                      :height "4%"
+            )
+  (widget_brightness)
+)
+
+;; Battery
+(defwindow window_battery
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "-0.5%"
+                      :y "0.7%"
+                      :width "10%"
+                      :height "4%"
+                      :anchor "top right"
+            )
+  (widget_battery)
+)
+
+
+
+
+
